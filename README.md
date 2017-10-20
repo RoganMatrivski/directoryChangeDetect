@@ -1,4 +1,8 @@
-# Directory Activity Detector
+# Directory Activity Detector 
+* master Branch Status : [![Build status](https://ci.appveyor.com/api/projects/status/l9vk0utmtwruu8wd/branch/master?svg=true)](https://ci.appveyor.com/project/RoganMatrivski/directorychangedetect/branch/master)
+* Current Branch Status : [![Build status](https://ci.appveyor.com/api/projects/status/l9vk0utmtwruu8wd?svg=true)](https://ci.appveyor.com/project/RoganMatrivski/directorychangedetect) [![Build Status](https://travis-ci.org/RoganMatrivski/directoryChangeDetect.svg?branch=branch1)](https://travis-ci.org/RoganMatrivski/directoryChangeDetect)
+
+
 
 Simple software that will detect any change on your target directory.
 
