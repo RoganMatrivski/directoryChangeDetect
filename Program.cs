@@ -55,35 +55,43 @@ namespace DetectFileChange
 
         private static void FileSystemWatcher_Renamed(object sender, RenamedEventArgs e)
         {
-            String timeStamp = GetTimestamp(DateTime.Now);
+            if (locationCheck(folderPath + "//" + e.Name))
+            {
+                String timeStamp = GetTimestamp(DateTime.Now);
 
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("[{2}] : A new file has been renamed from {0} to {1}", e.OldName, e.Name, timeStamp);
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("[{2}] : A new file has been renamed from {0} to {1}", e.OldName, e.Name, timeStamp);
 
-            alertPlay("info.wav");
+                alertPlay("info.wav");
+            }
         }
  
         private static void FileSystemWatcher_Deleted(object sender, FileSystemEventArgs e)
         {
-            String timeStamp = GetTimestamp(DateTime.Now);
+            if (locationCheck(folderPath + "//" + e.Name))
+            {
+                String timeStamp = GetTimestamp(DateTime.Now);
 
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("[{1}] : A new file has been deleted - {0}", e.Name, timeStamp);
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("[{1}] : A new file has been deleted - {0}", e.Name, timeStamp);
 
-            alertPlay("delete.wav");
+                alertPlay("delete.wav");
+            }
         }
  
         private static void FileSystemWatcher_Changed(object sender, FileSystemEventArgs e)
         {
-            
-            if (!directoryCheck(folderPath + "//" + e.Name))
+            if (locationCheck(folderPath + "//" + e.Name))
             {
-                String timeStamp = GetTimestamp(DateTime.Now);
+                if (!directoryCheck(folderPath + "//" + e.Name))
+                {
+                    String timeStamp = GetTimestamp(DateTime.Now);
 
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("[{1}] : A new file has been changed - {0}", e.Name, timeStamp);
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("[{1}] : A new file has been changed - {0}", e.Name, timeStamp);
 
-                alertPlay("alert.wav");
+                    alertPlay("alert.wav");
+                }
             }
         }
 
@@ -94,25 +102,27 @@ namespace DetectFileChange
 
         private static void FileSystemWatcher_Created(object sender, FileSystemEventArgs e)
         {
-            String timeStamp = GetTimestamp(DateTime.Now);
+            if (locationCheck(folderPath + "//" + e.Name))
+            {
+                String timeStamp = GetTimestamp(DateTime.Now);
 
-            Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine("[{1}] : A new file has been created - {0}", e.Name, timeStamp);
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine("[{1}] : A new file has been created - {0}", e.Name, timeStamp);
 
-            alertPlay("alert.wav");
+                alertPlay("alert.wav");
+            }
         }
 
         public static void alertPlay(string filename)
         {
-            Assembly assembly;
-            Stream soundStream;
-            SoundPlayer sp;
-            //Console.WriteLine("Playing {0} file", filename);
-            assembly = Assembly.GetExecutingAssembly();
-            sp = new SoundPlayer(assembly.GetManifestResourceStream
-                (string.Format("DetectFileChange.{0}", filename)));
-            sp.Play();
-            
+                Assembly assembly;
+                Stream soundStream;
+                SoundPlayer sp;
+                //Console.WriteLine("Playing {0} file", filename);
+                assembly = Assembly.GetExecutingAssembly();
+                sp = new SoundPlayer(assembly.GetManifestResourceStream
+                    (string.Format("DetectFileChange.{0}", filename)));
+                sp.Play();
         }
 
         public static bool directoryCheck(string filePath)
@@ -127,6 +137,18 @@ namespace DetectFileChange
                 return true;
             }
             else
+            {
+                return false;
+            }
+        }
+
+        public static bool locationCheck(string filePath)
+        {
+            try
+            {
+                return Directory.Exists(filePath);
+            }
+            catch
             {
                 return false;
             }
