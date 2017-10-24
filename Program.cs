@@ -21,14 +21,22 @@ namespace DetectFileChange
         [STAThread]
         static void Main(string[] args)
         {
-            folderPath = "";
-            
-            FolderBrowserDialog folderBrowserDialog1 = new FolderBrowserDialog();
-            if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
+            if (args.Length != 0)
             {
-                folderPath = folderBrowserDialog1.SelectedPath;
+                if (argsCheck(args[0]))
+                {
+                    folderPath = args[0];
+                }
             }
-
+            else
+            {
+                folderPath = "";
+                FolderBrowserDialog folderBrowserDialog1 = new FolderBrowserDialog();
+                if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    folderPath = folderBrowserDialog1.SelectedPath;
+                }
+            }
 
             // instantiate the object
             var fileSystemWatcher = new FileSystemWatcher();
@@ -149,6 +157,18 @@ namespace DetectFileChange
                 return Directory.Exists(filePath);
             }
             catch
+            {
+                return false;
+            }
+        }
+        
+        public static bool argsCheck(string filepath)
+        {
+            if (filepath.Length > 0 && Directory.Exists(filepath))
+            {
+                return true;
+            }
+            else
             {
                 return false;
             }
